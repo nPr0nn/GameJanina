@@ -1,6 +1,7 @@
 
 from .Player import Player
 from .BoundingBox import BBox
+from .Dragon import Dragon
 
 from . import manageCollisions
 from .Camera2D import Camera 
@@ -18,6 +19,8 @@ class World():
         self.entities.append(BBox(pos=(300, 300), dim=(40, 40), color=(255,255,255)))
         self.entities.append(BBox(pos=(500, 500), dim=(40, 40), color=(255,255,255)))
         self.entities.append(BBox(pos=(500, 700), dim=(60, 100), color=(255,255,255)))
+
+        self.dragon = Dragon(pos=(200, 0), size=100, world = self)
 
         self.grassManager = grassManager
         self.grassTime    = 0.0
@@ -37,10 +40,11 @@ class World():
         
         self.grassManager.update_render(screen, dt, offset=self.camera.pos, rot_function=rot_function)
         self.grassTime += dt * 100
-        
+
         self.player.render(screen, self.camera)
         for entity in self.entities:
             entity.render(screen, self.camera) 
+        self.dragon.render(screen, self.camera)
             
     def tick(self):
         self.grassManager.apply_force(self.player.pos, 10, 25)
@@ -62,10 +66,14 @@ class World():
             manageCollisions.resolvePlayerStaticEntity(self.player, entity) 
 
         self.player.tick()
+        self.dragon.tick()
         self.camera.tick(self.player.pos)
 
         for entity in self.entities:
             entity.tick()
+
+    def add_entity(self, entity):
+        self.entities.append(entity)
     
     def input(self, key):
         self.player.input(key)

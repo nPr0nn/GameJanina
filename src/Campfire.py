@@ -1,11 +1,11 @@
 import pygame 
 from pygame.math import Vector2
 
-class BBox():
+class Campfire():
     def __init__(self, pos, dim, color=(0,0,0)):
         self.pos   = Vector2(pos)
         self.dim   = Vector2(dim)
-        self.color = color 
+        self.color = color
 
     def tick(self):
         pass

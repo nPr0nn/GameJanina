@@ -63,3 +63,5 @@ def resolvePlayerStaticEntity(player, static_entity):
         reaction_velocity[0] = (1 - t_hit_near) * abs(player.vel[0]) * col_normal[0]
         reaction_velocity[1] = (1 - t_hit_near) * abs(player.vel[1]) * col_normal[1] 
         player.vel           += reaction_velocity
+
+    
