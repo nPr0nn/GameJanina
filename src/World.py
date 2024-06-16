@@ -42,10 +42,10 @@ class World():
         for entity in self.entities:
             entity.render(screen, self.camera) 
             
-    def tick(self):
+    def tick(self, dt):
         self.grassManager.apply_force(self.player.pos, 10, 25)
 
-        self.player.pre_tick()
+        self.player.pre_tick(dt)
         
         collisions = []       
         for entity in self.entities: 
@@ -61,10 +61,11 @@ class World():
             col_t, col_point, col_normal, entity = collision
             manageCollisions.resolvePlayerStaticEntity(self.player, entity) 
 
-        self.player.tick()
-        self.camera.tick(self.player.pos)
+        self.player.tick(dt)
+        self.camera.tick(self.player.pos, dt)
 
         for entity in self.entities:
+            self.grassManager.apply_force(entity.pos + entity.dim/2, entity.dim[0] * 0.8,entity.dim[1] * 0.8) 
             entity.tick()
     
     def input(self, key):
