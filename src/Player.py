@@ -2,7 +2,7 @@
 import time
 import pygame
 from pygame.math import Vector2
-
+from .utils import Utils
 from .BoundingBox import BBox
 
 class Player():
@@ -18,6 +18,9 @@ class Player():
         box_width  = 20
         box_height = 20
         self.box  = BBox((pos[0] - box_width/2, pos[1] - box_height/2), (box_width, box_height), (123,55,123))
+        self.HP = 255
+        self.color = (255,255,255)
+        self.timeImune = 0
        
     def pre_tick(self, dt):
         self.vel = Vector2([0,0])
@@ -34,18 +37,21 @@ class Player():
         self.vel = (self.vel).elementwise() * dt
  
     def tick(self, dt):
+        self.timeImune-=dt
         self.pos    += self.vel
         self.box.pos = (self.pos[0] - self.box.dim[0]/2, self.pos[1] - self.box.dim[1]/2)
 
-    def render(self, screen, camera):
-        radius = 5
+    def render(self, screen, camera, debug = False):
+        radius = 10
         screen_pos = camera.world2screen(self.pos)
-        pygame.draw.circle(screen, (255, 0, 0), screen_pos, radius, 0)
-        self.box.render(screen, camera)
+        pygame.draw.circle(screen, self.color, screen_pos, radius, 0)
+        
+    def hurt(self, damage):
+        if self.timeImune <= 0:
+            self.HP=Utils.clamp(self.HP-damage, 0, 255)
+            self.color = (255,self.HP,self.HP)
+            self.timeImune = 0
 
-
-
-        pass
 
     def input(self, tecla: str):
         if tecla.isupper():

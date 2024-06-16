@@ -1,3 +1,4 @@
+import pygame
 
 from .Player import Player
 from .BoundingBox import BBox
@@ -26,6 +27,11 @@ class World():
         self.grassTime    = 0.0
         self.plantGass()
 
+
+        # musica available on https://www.youtube.com/watch?v=s19CtWzNVP4
+        pygame.mixer.music.load("assets/junina8bits.mp3")
+        # pygame.mixer.music.play(-1)
+
     def plantGass(self):
       for y in range(50):
         y += 5
@@ -35,16 +41,16 @@ class World():
             if v > 0.1:
                 self.grassManager.place_tile((x, y), int(v * 12), [0, 1, 2, 3, 4])
         
-    def render(self, screen, dt): 
+    def render(self, screen, dt, debug = False): 
         rot_function = lambda x, y: int(math.sin(self.grassTime / 60 + x / 100) * 15)
         
         self.grassManager.update_render(screen, dt, offset=self.camera.pos, rot_function=rot_function)
         self.grassTime += dt * 100
 
-        self.player.render(screen, self.camera)
+        self.player.render(screen, self.camera, debug = debug)
         for entity in self.entities:
-            entity.render(screen, self.camera) 
-        self.dragon.render(screen, self.camera)
+            entity.render(screen, self.camera, debug = debug) 
+        self.dragon.render(screen, self.camera, debug = debug)
             
     def tick(self, dt):
         self.grassManager.apply_force(self.player.pos, 10, 25)

@@ -24,10 +24,10 @@ class Dragon():
 
         def times(self):
             self.shower_time_max = 100
-            self.concentrated_time_max = 10000
+            self.concentrated_time_max = 100
+            self.fireball_time_max = 100
             self.concentrated_time = self.concentrated_time_max
             self.shower_time = self.shower_time_max
-            self.fireball_time_max = 1000
             self.fireball_time = self.fireball_time_max
 
         def brain(self):
@@ -43,7 +43,7 @@ class Dragon():
                 if self.shower_time <= 0:
                     # shot dir eh a direcao do tiro, direcao da velocidade mais um angulo aleatorio
                     shot_dir = self.vel.rotate(random.randint(-50,50))
-                    self.world.add_entity(DragonFire(self.boca, "shower", shot_dir, 5, (255,0,0), self.world))
+                    self.world.add_entity(DragonFire(self.boca, "shower", shot_dir, 5, self.world))
             else:
                 if self.shower_time < 0:
                     self.shower_time = self.shower_time_max
@@ -52,20 +52,16 @@ class Dragon():
                 self.concentrated_time -= 1
                 if self.concentrated_time <= 0:
                     # shot dir eh a direcao do tiro, direcao da velocidade mais um angulo aleatorio
-                    shot_dir = self.vel.rotate(random.randint(-50,50))
-                    self.world.add_entity(DragonFire(self.boca, "concentrated", shot_dir, 5, (255,0,0), self.world))
-            else:
-                if self.concentrated_time < 0:
+                    shot_dir = self.vel
+                    self.world.add_entity(DragonFire(self.boca, "concentrated", shot_dir, 50, self.world))
                     self.concentrated_time = self.concentrated_time_max
 
             if self.player.pos.distance_to(self.pos) < 350:
                 self.fireball_time -= 1
                 if self.fireball_time <= 0:
                     # shot dir eh a direcao do tiro, direcao da velocidade mais um angulo aleatorio
-                    shot_dir = self.vel.rotate(random.randint(-50,50))
-                    self.world.add_entity(DragonFire(self.boca, "fireball", shot_dir, 5, (255,0,0), self.world))
-            else:
-                if self.fireball_time < 0:
+                    shot_dir = self.vel.rotate(random.randint(-10,10))
+                    self.world.add_entity(DragonFire(self.boca, "fireball", shot_dir, 10, self.world))
                     self.fireball_time = self.fireball_time_max
 
 
@@ -79,13 +75,13 @@ class Dragon():
                 self.rotation = dir.angle_to(Vector2(1,0))
                 self.boca = self.pos + self.size * self.vel.normalize()
 
+
              
 
-        def render(self, screen, camera):
+        def render(self, screen, camera, debug = False):
             screen_pos = camera.world2screen(self.pos)
             boca_pos = camera.world2screen(self.boca)
             
-            pygame.draw.circle(screen, self.color, screen_pos, self.size, 0)
-            pygame.draw.circle(screen, (255,0,0), boca_pos, 10, 1)
-
-            pass
+            if debug:
+                pygame.draw.circle(screen, self.color, screen_pos, self.size, 0)
+                pygame.draw.circle(screen, (255,0,0), boca_pos, 10, 1)

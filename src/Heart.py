@@ -11,6 +11,7 @@ class Heart():
     def __init__(self) -> None:
         Thread.__init__(self)
         pygame.init()
+        pygame.mixer.init()
 
         # Definir as dimensões da janela
         window_info          = pygame.display.Info() 
@@ -28,7 +29,8 @@ class Heart():
         gm.enable_ground_shadows(shadow_radius=4, shadow_color=(0, 0, 1), shadow_shift=(1, 2))
 
         self.world       = World(gm, scale)
-        
+        self.debug = True
+
         pygame.display.set_caption("Game Janina")
         Thread(self.run())
 
@@ -73,7 +75,7 @@ class Heart():
         # Limpar a telaa
         self.screen.fill((27,66,52))
         # Renderizar o mapa
-        self.world.render(self.screen, deltaTime)
+        self.world.render(self.screen, deltaTime, debug=self.debug)
        
         window_info     = pygame.display.Info() 
         resized_surface = pygame.transform.scale(self.screen, (window_info.current_w, window_info.current_h))

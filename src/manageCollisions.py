@@ -2,6 +2,7 @@
 from .Ray import Ray
 from .BoundingBox import BBox
 from pygame.math import Vector2
+from .DragonFire import DragonFire
 
 def checkRayBox(ray, box):
     inv_dir = Vector2(
@@ -63,5 +64,8 @@ def resolvePlayerStaticEntity(player, static_entity):
         reaction_velocity[0] = (1 - t_hit_near) * abs(player.vel[0]) * col_normal[0]
         reaction_velocity[1] = (1 - t_hit_near) * abs(player.vel[1]) * col_normal[1] 
         player.vel           += reaction_velocity
+        #verifica se static_entity eh instancia de DragonFire
+        if isinstance(static_entity, DragonFire):
+            player.hurt(static_entity.power)
 
     

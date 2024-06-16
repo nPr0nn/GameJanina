@@ -10,10 +10,11 @@ class BBox():
     def tick(self, dt):
         pass
 
-    def render(self, screen, camera):
+    def render(self, screen, camera, debug = False):
         screen_pos = camera.world2screen(self.pos)
         
-        rect = pygame.Rect(screen_pos[0], screen_pos[1], self.dim[0], self.dim[1])
-        # pygame.draw.circle(screen, self.color, self.pos, 5, 0)
-        pygame.draw.rect(screen, self.color, rect, width=0) 
+        if debug:
+            rect = pygame.Rect(screen_pos[0], screen_pos[1], self.dim[0], self.dim[1])
+            # pygame.draw.circle(screen, self.color, self.pos, 5, 0)
+            pygame.draw.rect(screen, self.color, rect, width=0)
         pass
