@@ -8,7 +8,7 @@ class Campfire():
         self.dim   = Vector2(dim)
         self.color = color
         self.vel   = Vector2([0,0])
-        self.box = BBox(pos, dim, color)
+        self.box = BBox(pos, dim, color, grass_interact=True)
         self.power = 0
 
     def tick(self, dt):

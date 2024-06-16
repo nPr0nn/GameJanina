@@ -24,7 +24,6 @@ class Dragon():
             self.HP = 255
 
 
-
         def times(self):
             self.shower_time_max = 100
             self.concentrated_time_max = 1000
@@ -86,10 +85,11 @@ class Dragon():
              
 
         def render(self, screen, camera, debug = False):
-            screen_pos = camera.world2screen(self.pos)
-            boca_pos = camera.world2screen(self.boca)
-            
-            if debug:
-                pygame.draw.circle(screen, self.color, screen_pos, self.size, 0)
-                pygame.draw.circle(screen, (255,0,0), boca_pos, 10, 1)
-                # self.box.render(screen, camera, debug)
+            if self.HP > 0:
+                screen_pos = camera.world2screen(self.pos)
+                boca_pos = camera.world2screen(self.boca)
+                
+                if debug:
+                    pygame.draw.circle(screen, self.color, screen_pos, self.size, 0)
+                    pygame.draw.circle(screen, (255,0,0), boca_pos, 10, 1)
+                    # self.box.render(screen, camera, debug)
