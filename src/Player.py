@@ -39,7 +39,7 @@ class Player():
         self.box  = BBox((pos[0] - box_width/2, pos[1] - box_height/2), (box_width, box_height), (123,55,123))
 
         self.box_sword  = BBox(pos, (box_width, box_height), (123,55,123))
-         self.HP = 255
+        self.HP = 255
         self.color = (255,255,255)
         self.timeImune = 0
        
@@ -109,7 +109,11 @@ class Player():
         screen.blit(sprite, sprite_center)
         screen.blit(rot_sprite_sword, rot + sprite_sword_dim/2 + self.sword_offset)
 
-
+    def hurt(self, damage):
+        if self.timeImune <= 0:
+            self.HP=Utils.clamp(self.HP-damage, 0, 255)
+            self.color = (255,self.HP,self.HP)
+            self.timeImune = 0
 
     def input(self, tecla: str):
         if tecla.isupper():
