@@ -25,7 +25,7 @@ class Heart():
         scale            = 0.5
         self.screen      = pygame.Surface((self.WINDOW_WIDTH * scale, self.WINDOW_HEIGHT * scale)) 
 
-        gm = grass.GrassManager('assets/grass', tile_size=10, stiffness=600, max_unique=5, place_range=[0, 1])
+        gm = grass.GrassManager('assets/grass', tile_size=15, stiffness=30, max_unique=5, place_range=[0, 1])
         gm.enable_ground_shadows(shadow_radius=4, shadow_color=(0, 0, 1), shadow_shift=(1, 2))
 
         self.world       = World(gm, scale)

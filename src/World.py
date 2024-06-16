@@ -18,15 +18,23 @@ import math
 class World():
     def __init__(self, grassManager, scale):
         self.entities = [] 
-        self.player   = Player((0, 0))
+        
+        self.player   = Player((1000, 1000))
         self.camera   = Camera(self.player.pos, scale)
  
+
         self.entities.append(Campfire(pos=(300, 300), dim=(40, 40), color=(255,255,255)))
         self.entities.append(Campfire(pos=(500, 500), dim=(40, 40), color=(255,255,255)))
         self.entities.append(Campfire(pos=(500, 700), dim=(60, 100), color=(255,255,255)))
 
         self.dragon = Dragon(pos=(200, 0), size=100, world = self)
 
+        self.entities.append(BBox(pos=(0, 300), dim=(5000, 40), color=(255,255,255), grass_interact=False))
+        self.entities.append(BBox(pos=(0, 4200), dim=(5000, 40), color=(255,255,255), grass_interact=False))
+
+        self.entities.append(BBox(pos=(600, 0), dim=(40, 5000), color=(255,255,255), grass_interact=False))
+        self.entities.append(BBox(pos=(4200, 0), dim=(40, 5000), color=(255,255,255), grass_interact=False))
+        
         self.grassManager = grassManager
         self.grassTime    = 0.0
         self.plantGass()
@@ -37,9 +45,9 @@ class World():
         pygame.mixer.music.play(-1)
 
     def plantGass(self):
-      for y in range(50):
+      for y in range(300):
         y += 5
-        for x in range(50):
+        for x in range(400):
             x += 5
             v = random.random()
             if v > 0.1:
@@ -47,13 +55,13 @@ class World():
         
     def render(self, screen, dt, debug = False): 
         rot_function = lambda x, y: int(math.sin(self.grassTime / 60 + x / 100) * 15)
-        
         self.grassManager.update_render(screen, dt, offset=self.camera.pos, rot_function=rot_function)
         self.grassTime += dt * 100
-
-        self.player.render(screen, self.camera, debug = debug)
+        
         for entity in self.entities:
-            entity.render(screen, self.camera, debug = debug) 
+            if entity.grass_interact:
+                entity.render(screen, self.camera, dt) 
+        self.player.render(screen, self.camera, dt)
         self.dragon.render(screen, self.camera, debug = debug)
             
     def tick(self, dt):
@@ -105,7 +113,8 @@ class World():
 
 
         for entity in self.entities:
-            self.grassManager.apply_force(entity.pos + entity.dim/2, entity.dim[0] * 0.8,entity.dim[1] * 0.8) 
+            if entity.grass_interact:
+                self.grassManager.apply_force(entity.pos + entity.dim/2, entity.dim[0] * 0.8,entity.dim[1] * 0.8) 
             entity.tick(dt)
 
     def add_entity(self, entity):

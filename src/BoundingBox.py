@@ -2,10 +2,12 @@ import pygame
 from pygame.math import Vector2
 
 class BBox():
-    def __init__(self, pos, dim, color=(0,0,0)):
+    def __init__(self, pos, dim, color=(0,0,0), grass_interact=True):
         self.pos   = Vector2(pos)
         self.dim   = Vector2(dim)
         self.color = color 
+
+        self.grass_interact = False
 
     def tick(self, dt):
         pass
