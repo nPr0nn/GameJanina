@@ -13,9 +13,9 @@ class Wall():
         self.box = BBox(pos, dim, color,grass_interact)
         self.vel = Vector2([0,0])
 
-
     def tick(self, dt):
         pass
 
     def render(self, screen, camera, dt, debug = False):
+        self.box.render(screen, camera, dt, debug)
         pass

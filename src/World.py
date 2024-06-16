@@ -62,7 +62,8 @@ class World():
         for entity in self.entities:
             if isinstance(entity, DragonFire) and self.dragon.HP <= 0:
                 continue
-            entity.box.render(screen, self.camera,dt, debug = debug) 
+            # if entity.box.grass_interact == True:
+            entity.render(screen, self.camera, dt, debug) 
         self.dragon.render(screen, self.camera, debug = debug)
             
             
@@ -113,6 +114,7 @@ class World():
         self.dragon.tick(dt)
         self.camera.tick(self.player.pos, dt)
 
+        self.grassManager.apply_force(self.dragon.pos, self.dragon.size * 0.8, self.dragon.size * 0.8) 
 
         for entity in self.entities:
             if entity.box.grass_interact:

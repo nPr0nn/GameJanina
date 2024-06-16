@@ -4,6 +4,8 @@ import pygame
 from pygame.math import Vector2
 from .utils import Utils
 
+import random 
+
 import math 
 from .BoundingBox import BBox
 from .Spritesheet import Spritesheet
@@ -47,6 +49,9 @@ class Player():
         self.vel = Vector2([0,0]) 
         self.acc = Vector2([0,0])
 
+        if self.HP == 0:
+            return
+        
         if self.pressed['A'] == 1:
             self.acc[0] = -self.ACC
         if self.pressed['D'] == 1:
@@ -82,6 +87,10 @@ class Player():
     def render(self, screen, camera, dt, degub = False):
         radius = 5
         screen_pos = camera.world2screen(self.pos)
+            
+        print(self.HP)
+        if self.HP == 0:
+            return
         # self.box.render(screen, camera, dt) 
         # pygame.draw.circle(screen, (255, 0, 0), screen_pos, radius, 0)
 
@@ -109,6 +118,8 @@ class Player():
             self.HP=Utils.clamp(self.HP-damage, 0, 255)
             self.color = (255,self.HP,self.HP)
             self.timeImune = 0
+            self.vel += Vector2(40*random.random(), 40*random.random())
+            
     def rotate_surface(self, surface, angle, pivot):
         rotated_surface = pygame.transform.rotate(surface, angle) 
         rotated_rect = rotated_surface.get_rect(center=pivot) 
