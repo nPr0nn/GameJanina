@@ -77,6 +77,7 @@ class Player():
         self.pos    += self.vel
         self.box.pos = self.pos - self.box.dim/2
         self.swordTime += 1 * dt
+        self.playerTime += 1 * dt
 
     def render(self, screen, camera, dt, degub = False):
         radius = 5
