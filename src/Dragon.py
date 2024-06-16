@@ -70,15 +70,15 @@ class Dragon():
                 if self.fireball_time <= 0:
                     # shot dir eh a direcao do tiro, direcao da velocidade mais um angulo aleatorio
                     shot_dir = self.vel.rotate(random.randint(-10,10))
-                    self.world.add_entity(DragonFire(self.boca, "fireball", shot_dir, 50, self.world))
+                    self.world.add_entity(DragonFire(self.boca, "fireball", shot_dir, 10, self.world))
                     self.fireball_time = self.fireball_time_max
 
 
-        def tick(self, dt): 
-            self.brain()
-
-            if self.HP <= 0: return
+        def tick(self, dt):
+            if self.HP <= 0:
+                return 
         
+            self.brain()
             self.pos += self.vel*dt
             self.box.pos = Vector2(self.pos[0]-self.size,self.pos[1]-self.size)
 
@@ -89,9 +89,9 @@ class Dragon():
                 self.boca = self.pos + self.size * self.vel.normalize()
 
         def hurt(self, damage):
-            self.HP = Utils.clamp(self.HP - damage, 0, 255)
+            self.HP = Utils.clamp(self.HP - 1, 0, 255)
+            print(self.HP)
             self.color = (127+(self.HP//2), 127, 127-(self.HP//2))
-
              
         def render(self, screen, camera, debug = False):
             if self.HP > 0:

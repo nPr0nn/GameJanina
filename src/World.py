@@ -62,7 +62,8 @@ class World():
         for entity in self.entities:
             if isinstance(entity, DragonFire) and self.dragon.HP <= 0:
                 continue
-            # if entity.box.grass_interact == True:
+            if isinstance(entity, Wall):
+                continue
             entity.render(screen, self.camera, dt, debug) 
         self.dragon.render(screen, self.camera, debug = debug)
             

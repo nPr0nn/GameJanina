@@ -88,7 +88,6 @@ class Player():
         radius = 5
         screen_pos = camera.world2screen(self.pos)
             
-        print(self.HP)
         if self.HP == 0:
             return
         # self.box.render(screen, camera, dt) 
