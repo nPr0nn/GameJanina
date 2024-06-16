@@ -2,15 +2,17 @@ import pygame
 from pygame.math import Vector2
 
 class BBox():
-    def __init__(self, pos, dim, color=(0,0,0)):
+    def __init__(self, pos, dim, color=(0,0,0), grass_interact=True):
         self.pos   = Vector2(pos)
         self.dim   = Vector2(dim)
         self.color = color 
 
-    def tick(self):
+        self.grass_interact = False
+
+    def tick(self, dt):
         pass
 
-    def render(self, screen, camera):
+    def render(self, screen, camera, dt):
         screen_pos = camera.world2screen(self.pos)
         
         rect = pygame.FRect(screen_pos[0], screen_pos[1], self.dim[0], self.dim[1])
