@@ -2,12 +2,13 @@ import pygame
 from pygame.math import Vector2
 import math
 import random
-
+from .BoundingBox import BBox
 from .DragonFire import DragonFire
+from .utils import Utils
 
 
 class Dragon():
-        def __init__(self, pos, size, world, color=(255,130,0)):
+        def __init__(self, pos, size, world, color=(255,127,0)):
             self.pos   = Vector2(pos)
             self.size = size
             self.color = color
@@ -19,13 +20,15 @@ class Dragon():
             self.boca = self.pos + Vector2(self.size, 0)
             self.vel_max = 30
             self.times()
+            self.box = BBox(Vector2(pos[0]-size,pos[1]-size), (size*2, size*2), (255,255,255))
+            self.HP = 255
 
 
 
         def times(self):
             self.shower_time_max = 100
-            self.concentrated_time_max = 100
-            self.fireball_time_max = 100
+            self.concentrated_time_max = 2000
+            self.fireball_time_max = 1000
             self.concentrated_time = self.concentrated_time_max
             self.shower_time = self.shower_time_max
             self.fireball_time = self.fireball_time_max
@@ -68,6 +71,7 @@ class Dragon():
         def tick(self, dt):
             self.brain()
             self.pos += self.vel*dt
+            self.box.pos = Vector2(self.pos[0]-self.size,self.pos[1]-self.size)
 
             # make dragon look for vel direction
             if self.vel.length() > 0:
@@ -75,6 +79,9 @@ class Dragon():
                 self.rotation = dir.angle_to(Vector2(1,0))
                 self.boca = self.pos + self.size * self.vel.normalize()
 
+        def hurt(self, damage):
+            self.HP = Utils.clamp(self.HP - damage, 0, 255)
+            self.color = (127+(self.HP//2), 127, 127-(self.HP//2))
 
              
 
@@ -85,3 +92,4 @@ class Dragon():
             if debug:
                 pygame.draw.circle(screen, self.color, screen_pos, self.size, 0)
                 pygame.draw.circle(screen, (255,0,0), boca_pos, 10, 1)
+                # self.box.render(screen, camera, debug)

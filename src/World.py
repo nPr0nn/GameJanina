@@ -3,9 +3,13 @@ import pygame
 from .Player import Player
 from .BoundingBox import BBox
 from .Dragon import Dragon
+from .DragonFire import DragonFire
+from .Campfire import Campfire
 
 from . import manageCollisions
 from .Camera2D import Camera 
+
+from .Dragon import Dragon
 
 from . import grass
 import random 
@@ -17,9 +21,9 @@ class World():
         self.player   = Player((0, 0))
         self.camera   = Camera(self.player.pos, scale)
  
-        self.entities.append(BBox(pos=(300, 300), dim=(40, 40), color=(255,255,255)))
-        self.entities.append(BBox(pos=(500, 500), dim=(40, 40), color=(255,255,255)))
-        self.entities.append(BBox(pos=(500, 700), dim=(60, 100), color=(255,255,255)))
+        self.entities.append(Campfire(pos=(300, 300), dim=(40, 40), color=(255,255,255)))
+        self.entities.append(Campfire(pos=(500, 500), dim=(40, 40), color=(255,255,255)))
+        self.entities.append(Campfire(pos=(500, 700), dim=(60, 100), color=(255,255,255)))
 
         self.dragon = Dragon(pos=(200, 0), size=100, world = self)
 
@@ -30,7 +34,7 @@ class World():
 
         # musica available on https://www.youtube.com/watch?v=s19CtWzNVP4
         pygame.mixer.music.load("assets/junina8bits.mp3")
-        # pygame.mixer.music.play(-1)
+        pygame.mixer.music.play(-1)
 
     def plantGass(self):
       for y in range(50):
@@ -61,8 +65,29 @@ class World():
         for entity in self.entities: 
             hit, col_point, col_normal, col_t, _ = manageCollisions.checkPlayerStaticEntity(self.player, entity) 
             if hit:
-                entity.color = (255,0,0)
-                collisions.append( (col_t, col_point, col_normal, entity) )
+                if isinstance(entity, DragonFire):
+                    self.player.hurt(entity.power)
+                    self.entities.remove(entity)
+                else:
+                    collisions.append( (col_t, col_point, col_normal, entity) )
+
+
+            else:
+                hit, col_point, col_normal, col_t, _ = manageCollisions.checkPlayerStaticEntity(entity, self.player) 
+                if hit:
+                    if isinstance(entity, DragonFire):
+                        self.player.hurt(entity.power)
+                        self.entities.remove(entity)
+                    else:
+                        collisions.append( (col_t, col_point, col_normal, entity) )
+  
+
+            if isinstance(entity, Campfire):
+                rec1 = pygame.Rect(entity.box.pos, entity.box.dim)
+                rec2 = pygame.Rect(self.dragon.box.pos, self.dragon.box.dim)
+                if pygame.Rect.colliderect(rec1, rec2):
+                    self.dragon.hurt(entity.power)
+
   
         # ordena pela proximidade do player (importante para evitar problemas de colisão simultanea)
         collisions.sort(key=lambda x: x[0])

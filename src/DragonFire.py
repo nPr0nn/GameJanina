@@ -1,4 +1,5 @@
 from pygame.math import Vector2
+from .BoundingBox import BBox
 import pygame
 
 class DragonFire():
@@ -7,7 +8,7 @@ class DragonFire():
         self.life_time = 500
         self.pos   = Vector2(pos)
         self.type  = type
-        self.dir   = Vector2(dir)
+        self.vel   = Vector2(dir)
         self.power = power
         if self.type == "fireball":
             self.color = (255,0,0)
@@ -21,14 +22,17 @@ class DragonFire():
             self.tamanho = 5
         self.dim = Vector2([self.tamanho,self.tamanho])
 
+        self.box = BBox(pos, self.dim, self.color)
+
         self.world = world
         self.time = 0
 
     def tick(self, dt):
-        self.pos += self.dir * self.power * dt
+        self.pos += self.vel * self.power * dt
         self.life_time -= 1
         if self.life_time <= 0:
             self.world.remove_entity(self)
+        self.box.pos = self.pos
 
 
     def render(self, screen, camera, debug = False):
