@@ -69,6 +69,8 @@ class World():
                     self.player.hurt(entity.power)
                     self.entities.remove(entity)
                 else:
+                    if isinstance(entity, Campfire):
+                        entity.power = 1
                     collisions.append( (col_t, col_point, col_normal, entity) )
 
 

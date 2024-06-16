@@ -27,8 +27,8 @@ class Dragon():
 
         def times(self):
             self.shower_time_max = 100
-            self.concentrated_time_max = 2000
-            self.fireball_time_max = 1000
+            self.concentrated_time_max = 1000
+            self.fireball_time_max = 300
             self.concentrated_time = self.concentrated_time_max
             self.shower_time = self.shower_time_max
             self.fireball_time = self.fireball_time_max

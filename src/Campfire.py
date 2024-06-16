@@ -9,7 +9,7 @@ class Campfire():
         self.color = color
         self.vel   = Vector2([0,0])
         self.box = BBox(pos, dim, color)
-        self.power = 1
+        self.power = 0
 
     def tick(self, dt):
         pass
