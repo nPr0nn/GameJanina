@@ -73,10 +73,13 @@ class World():
 
         for entity in self.entities:
             self.grassManager.apply_force(entity.pos + entity.dim/2, entity.dim[0] * 0.8,entity.dim[1] * 0.8) 
-            entity.tick()
+            entity.tick(dt)
 
     def add_entity(self, entity):
         self.entities.append(entity)
+
+    def remove_entity(self, entity):
+        self.entities.remove(entity)
     
     def input(self, key):
         self.player.input(key)

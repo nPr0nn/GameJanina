@@ -43,7 +43,6 @@ class Player():
         pygame.draw.circle(screen, (255, 0, 0), screen_pos, radius, 0)
         self.box.render(screen, camera)
 
-        screen.blit(self.spritesheet, self.pos)
 
 
         pass

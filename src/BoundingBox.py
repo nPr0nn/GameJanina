@@ -7,7 +7,7 @@ class BBox():
         self.dim   = Vector2(dim)
         self.color = color 
 
-    def tick(self):
+    def tick(self, dt):
         pass
 
     def render(self, screen, camera):

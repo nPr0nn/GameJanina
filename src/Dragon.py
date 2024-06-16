@@ -1,6 +1,7 @@
 import pygame 
 from pygame.math import Vector2
 import math
+import random
 
 from .DragonFire import DragonFire
 
@@ -16,8 +17,18 @@ class Dragon():
             self.type_col_box = "circle"
             self.rotation = 0
             self.boca = self.pos + Vector2(self.size, 0)
-            self.vel_max = 0.3
+            self.vel_max = 30
+            self.times()
 
+
+
+        def times(self):
+            self.shower_time_max = 100
+            self.concentrated_time_max = 10000
+            self.concentrated_time = self.concentrated_time_max
+            self.shower_time = self.shower_time_max
+            self.fireball_time_max = 1000
+            self.fireball_time = self.fireball_time_max
 
         def brain(self):
             # continuo
@@ -27,14 +38,40 @@ class Dragon():
             else:
                 self.vel = Vector2(0,0)
 
-            if self.player.pos.distance_to(self.pos) < 150:
-                self.world.add_entity(DragonFire(self.boca, "fireball", self.vel, 5, (255,0,0)))
-            
+            if self.player.pos.distance_to(self.pos) < 200:
+                self.shower_time -= 1
+                if self.shower_time <= 0:
+                    # shot dir eh a direcao do tiro, direcao da velocidade mais um angulo aleatorio
+                    shot_dir = self.vel.rotate(random.randint(-50,50))
+                    self.world.add_entity(DragonFire(self.boca, "shower", shot_dir, 5, (255,0,0), self.world))
+            else:
+                if self.shower_time < 0:
+                    self.shower_time = self.shower_time_max
+
+            if self.player.pos.distance_to(self.pos) < 500:
+                self.concentrated_time -= 1
+                if self.concentrated_time <= 0:
+                    # shot dir eh a direcao do tiro, direcao da velocidade mais um angulo aleatorio
+                    shot_dir = self.vel.rotate(random.randint(-50,50))
+                    self.world.add_entity(DragonFire(self.boca, "concentrated", shot_dir, 5, (255,0,0), self.world))
+            else:
+                if self.concentrated_time < 0:
+                    self.concentrated_time = self.concentrated_time_max
+
+            if self.player.pos.distance_to(self.pos) < 350:
+                self.fireball_time -= 1
+                if self.fireball_time <= 0:
+                    # shot dir eh a direcao do tiro, direcao da velocidade mais um angulo aleatorio
+                    shot_dir = self.vel.rotate(random.randint(-50,50))
+                    self.world.add_entity(DragonFire(self.boca, "fireball", shot_dir, 5, (255,0,0), self.world))
+            else:
+                if self.fireball_time < 0:
+                    self.fireball_time = self.fireball_time_max
 
 
-        def tick(self):
+        def tick(self, dt):
             self.brain()
-            self.pos += self.vel
+            self.pos += self.vel*dt
 
             # make dragon look for vel direction
             if self.vel.length() > 0:

@@ -4,7 +4,7 @@ import pygame
 class DragonFire():
     def __init__(self, pos, type, dir, power = 5, color=(255,0,0), world=None):
         # types = shower, fireball, concentrated
-        self.life_time = 100
+        self.life_time = 1000
         self.pos   = Vector2(pos)
         self.type  = type
         self.dir   = Vector2(dir)
@@ -21,11 +21,14 @@ class DragonFire():
         self.dim = Vector2([tamanho,tamanho])
         self.color = color
         self.world = world
+        self.time = 0
 
-    def tick(self):
-        self.pos += self.dir * self.power
+    def tick(self, dt):
+        self.pos += self.dir * self.power * dt
         self.life_time -= 1
-        
+        if self.life_time <= 0:
+            self.world.remove_entity(self)
+
 
     def render(self, screen, camera):
         screen_pos = camera.world2screen(self.pos)
