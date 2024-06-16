@@ -59,38 +59,17 @@ class Heart():
 
             unprocessedTime += deltaTime  # tempo nao processado
             frameTime       += deltaTime
-
-            # enquanto nao processou td q deveria (devido a lag em render ou coisas assim)
-            while unprocessedTime >= self.UPDATE_CAP:
-                # Isso garante que o tempo de atualizacao seja constante
-                # e nao dependa do tempo de renderizacao. Igualando o 
-                # jogo para todos os computadores, apenas aumentando o
-                # fps para computadores mais potentes
-                unprocessedTime -= self.UPDATE_CAP  # Tempo comido
-                render = True
-                
-                self.tick()
-
-                if frameTime >= 1.0:
-                    frameTime = 0
-                    fps       = frames
-                    frames    = 0
-                    # print("FPS: " + str(fps))
-
-            # Depois de processar o tempo, renderiza
-            if render:
-                self.render(self, deltaTime)
-                frames += 1
-            else:
-                time.sleep(0.001)
+ 
+            self.tick(deltaTime) 
+            self.render(deltaTime)
                 
         self.dispose()
       
-    def tick(self): # metodo chamado a cada frame
+    def tick(self, deltaTime): # metodo chamado a cada frame
         self.input()
-        self.world.tick()
+        self.world.tick(deltaTime)
 
-    def render(self, gc, deltaTime): # metodo chamado a cada frame
+    def render(self, deltaTime): # metodo chamado a cada frame
         # Limpar a telaa
         self.screen.fill((27,66,52))
         # Renderizar o mapa

@@ -8,7 +8,7 @@ class Camera():
         self.pos     = Vector2(pos)
         self.t       = 0
 
-    def tick(self, target):
+    def tick(self, target, dt):
         window_info = pygame.display.Info()
         offset      = ((window_info.current_w * self.scale)/ 2, (window_info.current_h * self.scale)/ 2)
         self.pos    = target - offset
